@@ -27,24 +27,38 @@ class FilmService {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST,ex.message)
         }
     }
-    fun update(film: Film): Film {
-        try {
-            filmRepository.findById(film.id)
-                ?: throw Exception("ID no existe")
 
-            return filmRepository.save(film)
+    /*
+    fun save(character: Character): Character{
+        try{
+            val scene = sceneRepository.findById(character.sceneId)
+            val listCharacter = characterRepository.findBySceneId(character.sceneId)
+            var sum = 0.0
+
+            listCharacter.map {
+                sum += sum * it.cost
+            }
+
+            if (scene?.budget!! <= sum + character.cost) {
+                throw IllegalArgumentException("El costo total de los personajes supera el presupuesto de la escena")
+            }
+
+            return characterRepository.save(character)
         }
         catch (ex:Exception){
             throw ResponseStatusException(HttpStatus.NOT_FOUND,ex.message)
         }
     }
+    */
 
     fun updateName(film: Film): Film {
         try{
             val response = filmRepository.findById(film.id)
                 ?: throw Exception("ID no existe")
             response.apply {
-                title=film.title //un atributo del modelo
+                title=film.title
+            director=film.director
+          //un atributo del modelo
             }
             return filmRepository.save(response)
         }

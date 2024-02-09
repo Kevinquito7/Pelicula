@@ -23,23 +23,30 @@ class FilmController {
     fun save (@RequestBody film: Film): ResponseEntity<*> {
         return ResponseEntity<Film>(filmService.save(film), HttpStatus.CREATED)
     }
-    @PutMapping
-    fun update (@RequestBody film: Film):ResponseEntity<Film>{
-        return ResponseEntity(filmService.update(film), HttpStatus.OK)
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable("id") id: Long, @RequestBody film: Film): ResponseEntity<Film> {
+        val existingFilm = filmService.listById(id)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+
+        existingFilm.title = film.title
+        existingFilm.director = film.director
+
+        val updatedFilm = filmService.updateName(existingFilm)
+
+        return ResponseEntity(updatedFilm, HttpStatus.OK)
     }
 
-    @PatchMapping
-    fun updateName (@RequestBody film: Film):ResponseEntity<Film>{
-        return ResponseEntity(filmService.updateName(film), HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Long): ResponseEntity<*> {
+        val response = filmService.delete(id)
+        return ResponseEntity(filmService.listById(id), HttpStatus.OK)
+
     }
+
     @GetMapping("/{id}")
-    fun listById (@PathVariable("id") id: Long): ResponseEntity<*>{
-        return ResponseEntity(filmService.listById (id), HttpStatus.OK)
-
+    fun listById (@PathVariable("id") id: Long): ResponseEntity<*> {
+        return ResponseEntity(filmService.listById(id), HttpStatus.OK)
     }
-    @DeleteMapping("/delete/{id}")
-    fun delete (@PathVariable("id") id: Long):Boolean?{
-        return filmService.delete(id)
-    }
-
 }

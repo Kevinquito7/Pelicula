@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CharactersRepository:JpaRepository<Characters, Long> {
     fun findById(id: Long?): Characters?
+    /*fun findBySceneId (sceneId: Long?): List<Character>*/
 }
